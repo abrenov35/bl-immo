@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BL Immo — L'Immobilier Clé en Main</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --noir: #0d0d0b;
+    --blanc: #f0ece4;
+    --or: #d4a843;
+    --or-clair: #ecd48a;
+    --gris: #b8b5ac;
+    --gris-clair: #d8d4cc;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--noir);
+    color: var(--blanc);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--or);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, background 0.3s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 32px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    mix-blend-mode: normal;
+  }
+  nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(10,10,8,0.95), transparent);
+    pointer-events: none;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--blanc);
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+  }
+  .nav-logo span { color: var(--or); }
+  .nav-links {
+    display: flex;
+    gap: 48px;
+    list-style: none;
+    position: relative;
+    z-index: 1;
+  }
+  .nav-links a {
+    color: var(--gris);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--or); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 60px 100px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://abrenov35.com/images/Rénovation complète Maison BRUZ.webp');
+    background-size: cover;
+    background-position: center;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(10,10,8,0.85) 0%, rgba(10,10,8,0.6) 50%, rgba(10,10,8,0.75) 100%);
+  }
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, black, transparent);
+  }
+  .hero-number {
+    position: absolute;
+    top: 50%;
+    right: 60px;
+    transform: translateY(-60%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(180px, 22vw, 340px);
+    font-weight: 300;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.12);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    user-select: none;
+    animation: fadeInRight 1.5s ease forwards;
+    opacity: 0;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    animation: fadeInUp 1.2s ease 0.3s forwards;
+    opacity: 0;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--or);
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--or);
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7vw, 100px);
+    font-weight: 300;
+    line-height: 1.0;
+    margin-bottom: 32px;
+    letter-spacing: -0.02em;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--or);
+  }
+  .hero-sub {
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    color: var(--gris);
+    line-height: 1.9;
+    max-width: 440px;
+    margin-bottom: 56px;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    color: var(--blanc);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    transition: gap 0.3s;
+  }
+  .hero-cta:hover { gap: 32px; }
+  .hero-cta-line {
+    width: 60px; height: 1px;
+    background: var(--or);
+    transition: width 0.3s;
+  }
+  .hero-cta:hover .hero-cta-line { width: 80px; }
+  .hero-scroll {
+    position: absolute;
+    bottom: 48px;
+    right: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gris);
+    z-index: 2;
+    animation: fadeIn 2s ease 1s forwards;
+    opacity: 0;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--or), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* CONCEPT */
+  .concept {
+    padding: 160px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 120px;
+    align-items: center;
+    position: relative;
+  }
+  .concept::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.3), transparent);
+  }
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--or);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(201,168,76,0.3);
+    max-width: 60px;
+  }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 58px);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 32px;
+  }
+  h2 em { font-style: italic; color: var(--or); }
+  .concept-text {
+    font-size: 14px;
+    color: var(--gris);
+    line-height: 2;
+    margin-bottom: 24px;
+  }
+  .concept-right {
+    position: relative;
+  }
+  .concept-visual {
+    aspect-ratio: 3/4;
+    background:
+      linear-gradient(135deg, rgba(201,168,76,0.08) 0%, transparent 50%),
+      linear-gradient(225deg, rgba(201,168,76,0.05) 0%, transparent 50%),
+      #111108;
+    border: 1px solid rgba(201,168,76,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .concept-visual::before {
+    content: 'BL';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 120px;
+    font-weight: 300;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.2);
+    letter-spacing: 0.1em;
+  }
+  .concept-visual-tag {
+    position: absolute;
+    bottom: 32px;
+    left: 32px;
+    right: 32px;
+    padding: 20px 24px;
+    background: rgba(10,10,8,0.92);
+    border-left: 2px solid var(--or);
+    font-size: 12px;
+    color: var(--gris);
+    letter-spacing: 0.05em;
+    line-height: 1.7;
+  }
+  .concept-visual-tag strong {
+    display: block;
+    color: var(--blanc);
+    font-weight: 400;
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+
+  /* OFFRES */
+  .offres {
+    padding: 160px 60px;
+  }
+  .offres-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .offres-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .offre-card {
+    padding: 56px 48px;
+    border: 1px solid rgba(201,168,76,0.15);
+    position: relative;
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .offre-card:hover {
+    border-color: rgba(201,168,76,0.35);
+    background: rgba(255,255,255,0.04);
+  }
+  .offre-card--featured {
+    border-color: rgba(201,168,76,0.4);
+    background: rgba(201,168,76,0.04);
+  }
+  .offre-badge {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--noir);
+    background: var(--or);
+    padding: 6px 14px;
+  }
+  .offre-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 300;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.25);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .offre-tag {
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--or);
+    margin-bottom: 20px;
+  }
+  .offre-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 24px;
+  }
+  .offre-title em { font-style: italic; color: var(--or); }
+  .offre-desc {
+    font-size: 13px;
+    color: var(--gris);
+    line-height: 1.9;
+    margin-bottom: 32px;
+  }
+  .offre-list {
+    list-style: none;
+    margin-bottom: 36px;
+  }
+  .offre-list li {
+    font-size: 12px;
+    color: var(--gris);
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .offre-list li::before {
+    content: '';
+    display: block;
+    width: 20px; height: 1px;
+    background: var(--or);
+    flex-shrink: 0;
+  }
+  .offre-cible {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(212,168,67,0.6);
+  }
+
+  @media (max-width: 900px) {
+    .offres { padding: 80px 24px; }
+    .offres-grid { grid-template-columns: 1fr; }
+  }
+
+  /* PROCESS */
+  .process {
+    padding: 160px 60px;
+    background: linear-gradient(180deg, transparent, rgba(201,168,76,0.02), transparent);
+  }
+  .process-header {
+    text-align: center;
+    margin-bottom: 100px;
+  }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    top: 32px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), rgba(201,168,76,0.3), rgba(201,168,76,0.3), transparent);
+  }
+  .step {
+    padding: 0 40px;
+    position: relative;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+  }
+  .step:nth-child(1) { animation-delay: 0.1s; }
+  .step:nth-child(2) { animation-delay: 0.3s; }
+  .step:nth-child(3) { animation-delay: 0.5s; }
+  .step:nth-child(4) { animation-delay: 0.7s; }
+  .step-num {
+    width: 64px; height: 64px;
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--or);
+    margin-bottom: 32px;
+    background: var(--noir);
+    position: relative;
+    z-index: 1;
+  }
+  .step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 16px;
+    color: var(--blanc);
+  }
+  .step-desc {
+    font-size: 13px;
+    color: var(--gris);
+    line-height: 1.9;
+  }
+  .step-accent {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--or);
+  }
+
+  /* VALEURS */
+  .valeurs {
+    padding: 160px 60px;
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 100px;
+  }
+  .valeurs-left { position: sticky; top: 120px; align-self: start; }
+  .valeur-item {
+    padding: 48px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 32px;
+    align-items: start;
+    transition: background 0.3s;
+  }
+  .valeur-item:first-child { border-top: 1px solid rgba(255,255,255,0.06); }
+  .valeur-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.3);
+    line-height: 1;
+  }
+  .valeur-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 12px;
+  }
+  .valeur-desc {
+    font-size: 13px;
+    color: var(--gris);
+    line-height: 2;
+  }
+
+  /* RÉALISATIONS */
+  .realisations {
+    padding: 160px 60px;
+    background: linear-gradient(180deg, transparent, rgba(201,168,76,0.02), transparent);
+  }
+  .realisations-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .realisations-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .realisation-item {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    cursor: pointer;
+  }
+  .realisation-item:first-child {
+    grid-column: span 2;
+    aspect-ratio: 16/9;
+  }
+  .realisation-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+    filter: brightness(0.85);
+  }
+  .realisation-item:hover img {
+    transform: scale(1.05);
+    filter: brightness(1);
+  }
+  .realisation-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,8,0.85) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    display: flex;
+    align-items: flex-end;
+    padding: 24px;
+  }
+  .realisation-item:hover .realisation-overlay { opacity: 1; }
+  .realisation-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--blanc);
+  }
+  .realisation-label span {
+    display: block;
+    font-size: 9px;
+    color: var(--or);
+    margin-bottom: 4px;
+    letter-spacing: 0.3em;
+  }
+  @media (max-width: 900px) {
+    .realisations { padding: 80px 24px; }
+    .realisations-grid { grid-template-columns: 1fr 1fr; }
+    .realisation-item:first-child { grid-column: span 2; }
+  }
+
+  /* CONTACT */
+  .contact {
+    padding: 160px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.05), transparent);
+  }
+  .contact h2 { margin-bottom: 24px; }
+  .contact-sub {
+    font-size: 15px;
+    color: var(--gris);
+    margin-bottom: 64px;
+    line-height: 1.9;
+  }
+  .contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 48px;
+    border: 1px solid rgba(201,168,76,0.5);
+    color: var(--or);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--or);
+    transform: translateX(-100%);
+    transition: transform 0.4s;
+  }
+  .contact-btn:hover::before { transform: translateX(0); }
+  .contact-btn:hover { color: var(--noir); }
+  .contact-btn span { position: relative; z-index: 1; }
+  .contact-info {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+  }
+  .contact-item {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .contact-item-label {
+    color: var(--or);
+    margin-bottom: 8px;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+  }
+  .contact-item-val { color: var(--gris); }
+
+  /* FOOTER */
+  footer {
+    padding: 48px 60px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--gris);
+  }
+  .footer-logo span { color: var(--or); }
+  .footer-copy {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: rgba(138,138,130,0.5);
+  }
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(138,138,130,0.6);
+  }
+
+  /* DIVIDER */
+  .divider {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.4), transparent);
+    margin: 0 auto;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(40px) translateY(-60%); }
+    to { opacity: 1; transform: translateX(0) translateY(-60%); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.6); opacity: 0.4; }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* OR LINE */
+  .or-line {
+    width: 60px;
+    height: 1px;
+    background: var(--or);
+    margin: 32px 0;
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 24px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 24px 80px; }
+    .hero-number { display: none; }
+    .concept, .valeurs { grid-template-columns: 1fr; gap: 60px; padding: 80px 24px; }
+    .process { padding: 80px 24px; }
+    .process-steps { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .process-steps::before { display: none; }
+    .contact { padding: 80px 24px; }
+    .contact-info { flex-direction: column; gap: 32px; }
+    footer { flex-direction: column; gap: 20px; text-align: center; padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">BL<span>.</span>Immo</a>
+  <ul class="nav-links">
+    <li><a href="#concept">Concept</a></li>
+    <li><a href="#offres">Nos offres</a></li>
+    <li><a href="#process">Processus</a></li>
+    <li><a href="#realisations">Réalisations</a></li>
+    <li><a href="#valeurs">Valeurs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-number">BL</div>
+  <div class="hero-content">
+    <div class="hero-tag">Immobilier Premium · Bretagne</div>
+    <h1>L'immobilier<br><em>clé en main,</em><br>sans compromis.</h1>
+    <p class="hero-sub">Nous trouvons, rénovons et livrons des biens immobiliers entièrement aménagés, prêts à investir. Vous choisissez. Nous faisons le reste.</p>
+    <a href="#concept" class="hero-cta">
+      <div class="hero-cta-line"></div>
+      Découvrir notre approche
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- CONCEPT -->
+<section class="concept" id="concept">
+  <div class="concept-left reveal">
+    <div class="section-label">Notre concept</div>
+    <h2>Des biens à rénover.<br><em>On s'en occupe.</em></h2>
+    <p class="concept-text">BL Immo sélectionne des biens à rénover, pilote leur transformation de A à Z, et les livre meublés, décorés et prêts à l'emploi.</p>
+    <p class="concept-text">Vous investissez dans un bien fini. Nous gérons tout — de la recherche à la remise des clés.</p>
+    <div class="or-line"></div>
+    <p class="concept-text" style="font-size: 13px; letter-spacing: 0.05em;">Chaque opération est menée avec une exigence absolue sur la qualité et la rentabilité.</p>
+  </div>
+  <div class="concept-right reveal">
+    <div class="concept-visual">
+      <div class="concept-visual-tag">
+        <strong>Transformation & Décoration</strong>
+        Des artisans sélectionnés, des délais respectés, des finitions soignées.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- OFFRES -->
+<section class="offres" id="offres">
+  <div class="offres-header reveal">
+    <div class="section-label" style="justify-content: center;">Nos offres</div>
+    <h2>Deux façons d'investir<br><em>avec BL Immo.</em></h2>
+  </div>
+  <div class="offres-grid">
+    <div class="offre-card reveal">
+      <div class="offre-num">01</div>
+      <div class="offre-tag">Achat — Revente</div>
+      <h3 class="offre-title">Clé en main<br><em>à la revente</em></h3>
+      <p class="offre-desc">Nous achetons un bien, le rénovons entièrement et le livrons meublé et décoré. Vous achetez un bien fini, prêt à louer ou à habiter. Aucune gestion de travaux, aucune mauvaise surprise.</p>
+      <ul class="offre-list">
+        <li>Bien sélectionné et négocié par nos soins</li>
+        <li>Rénovation complète gérée de A à Z</li>
+        <li>Livré meublé et décoré</li>
+        <li>Prêt à louer dès la remise des clés</li>
+      </ul>
+      <div class="offre-cible">Idéal pour · Investisseur locatif · Résidence secondaire</div>
+    </div>
+    <div class="offre-card offre-card--featured reveal">
+      <div class="offre-badge">Tendance</div>
+      <div class="offre-num">02</div>
+      <div class="offre-tag">Co-living</div>
+      <h3 class="offre-title">Rendement<br><em>optimisé</em></h3>
+      <p class="offre-desc">Nous transformons de grandes surfaces — maisons, longères, immeubles — en espaces de co-living pensés et aménagés. Plusieurs locataires, un seul bien, un rendement locatif supérieur.</p>
+      <ul class="offre-list">
+        <li>Biens de 150m² et plus ciblés</li>
+        <li>Conception espaces privatifs + communs</li>
+        <li>Aménagement complet et fonctionnel</li>
+        <li>Rendement locatif optimisé</li>
+      </ul>
+      <div class="offre-cible">Idéal pour · Investisseur locatif · Rendement maximisé</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="process-header reveal">
+    <div class="section-label" style="justify-content: center;">Notre méthode</div>
+    <h2>Quatre étapes.<br><em>Un seul résultat.</em></h2>
+  </div>
+  <div class="process-steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <div class="step-title">Identification</div>
+      <p class="step-desc">Prospection ciblée, analyse sérieuse du potentiel. Seuls les biens avec une vraie marge de valorisation sont retenus.</p>
+      <span class="step-accent">Sélection & Analyse</span>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">02</div>
+      <div class="step-title">Acquisition</div>
+      <p class="step-desc">Négociation au bon prix, montage financier optimisé. Chaque achat est structuré pour maximiser le rendement final.</p>
+      <span class="step-accent">Négociation & Financement</span>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">03</div>
+      <div class="step-title">Transformation</div>
+      <p class="step-desc">Rénovation complète, aménagement et décoration haut de gamme. Le bien est livré meublé, équipé, prêt à l'emploi.</p>
+      <span class="step-accent">Rénovation & Design</span>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">04</div>
+      <div class="step-title">Livraison</div>
+      <p class="step-desc">Remise des clés d'un bien entièrement fini. Votre investissement est immédiatement opérationnel.</p>
+      <span class="step-accent">Clé en Main</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VALEURS -->
+<section class="valeurs" id="valeurs">
+  <div class="valeurs-left reveal">
+    <div class="section-label">Notre ADN</div>
+    <h2>Des valeurs<br>au service de<br><em>votre patrimoine.</em></h2>
+    <p class="concept-text" style="margin-top: 24px;">BL Immo est né d'une conviction simple : investir dans l'immobilier ne devrait pas être une source de stress. Nous prenons tout en charge.</p>
+    <div class="or-line"></div>
+    <p style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--or);">Bretagne · France</p>
+  </div>
+  <div class="valeurs-right">
+    <div class="valeur-item reveal">
+      <div class="valeur-num">01</div>
+      <div>
+        <div class="valeur-title">Exigence</div>
+        <p class="valeur-desc">Chaque détail compte. Des matériaux aux finitions, nous ne faisons pas de compromis sur la qualité du bien livré.</p>
+      </div>
+    </div>
+    <div class="valeur-item reveal">
+      <div class="valeur-num">02</div>
+      <div>
+        <div class="valeur-title">Transparence</div>
+        <p class="valeur-desc">Vous êtes informé à chaque étape. Budget, délais, avancement — tout est partagé clairement. Zéro surprise.</p>
+      </div>
+    </div>
+    <div class="valeur-item reveal">
+      <div class="valeur-num">03</div>
+      <div>
+        <div class="valeur-title">Performance</div>
+        <p class="valeur-desc">Notre modèle intégré — de la sélection à la livraison — maximise la valeur créée à chaque étape. Votre rentabilité est notre priorité.</p>
+      </div>
+    </div>
+    <div class="valeur-item reveal">
+      <div class="valeur-num">04</div>
+      <div>
+        <div class="valeur-title">Sérénité</div>
+        <p class="valeur-desc">Vous investissez. Nous gérons. De la première visite à la remise des clés, vous n'avez qu'une chose à faire : choisir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RÉALISATIONS -->
+<section class="realisations" id="realisations">
+  <div class="realisations-header reveal">
+    <div class="section-label" style="justify-content: center;">Nos réalisations</div>
+    <h2>Le travail<br><em>parle de lui-même.</em></h2>
+  </div>
+  <div class="realisations-grid">
+    <div class="realisation-item reveal">
+      <img src="https://abrenov35.com/images/Rénovation complète Maison BRUZ.webp" alt="Rénovation maison Bruz">
+      <div class="realisation-overlay">
+        <div class="realisation-label"><span>Bruz (35)</span>Rénovation complète maison</div>
+      </div>
+    </div>
+    <div class="realisation-item reveal">
+      <img src="https://abrenov35.com/images/Salle da bain Rennes 35.webp" alt="Salle de bain Rennes">
+      <div class="realisation-overlay">
+        <div class="realisation-label"><span>Rennes (35)</span>Salle de bain</div>
+      </div>
+    </div>
+    <div class="realisation-item reveal">
+      <img src="https://abrenov35.com/images/Salle de bain  - Rennes 35.webp" alt="Salle de bain Rennes">
+      <div class="realisation-overlay">
+        <div class="realisation-label"><span>Rennes (35)</span>Salle de bain</div>
+      </div>
+    </div>
+    <div class="realisation-item reveal">
+      <img src="https://abrenov35.com/images/Logement locatif Cesson-Sévigné 35.webp" alt="Logement locatif Cesson-Sévigné">
+      <div class="realisation-overlay">
+        <div class="realisation-label"><span>Cesson-Sévigné (35)</span>Logement locatif</div>
+      </div>
+    </div>
+    <div class="realisation-item reveal">
+      <img src="https://abrenov35.com/images/Rénovation Chambre Rennes 35.webp" alt="Chambre Rennes">
+      <div class="realisation-overlay">
+        <div class="realisation-label"><span>Rennes (35)</span>Chambre</div>
+      </div>
+    </div>
+    <div class="realisation-item reveal">
+      <img src="https://abrenov35.com/images/Logement étudiant Rennes 35.webp" alt="Logement étudiant Rennes">
+      <div class="realisation-overlay">
+        <div class="realisation-label"><span>Rennes (35)</span>Logement étudiant</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-bg"></div>
+  <div class="section-label" style="justify-content: center;" >Nous contacter</div>
+  <h2>Un projet ?<br><em>Parlons-en.</em></h2>
+  <p class="contact-sub">Vous cherchez un investissement immobilier clé en main en Bretagne ?<br>Nous sélectionnons nos partenaires avec soin. Prenons contact.</p>
+  <a href="mailto:contact@blimmo.fr" class="contact-btn">
+    <span>Nous écrire</span>
+  </a>
+  <div class="contact-info">
+    <div class="contact-item">
+      <div class="contact-item-label">Localisation</div>
+      <div class="contact-item-val">Bretagne, France</div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-item-label">Email</div>
+      <div class="contact-item-val">contact@blimmo.fr</div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-item-label">Statut</div>
+      <div class="contact-item-val">Investissement & Valorisation</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">BL<span>.</span>Immo</div>
+  <div class="footer-tagline">L'immobilier, autrement.</div>
+  <div class="footer-copy">© 2026 BL Immo SAS — Tous droits réservés</div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '16px';
+      cursor.style.height = '16px';
+      ring.style.width = '56px';
+      ring.style.height = '56px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '8px';
+      cursor.style.height = '8px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth nav
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
